@@ -11,8 +11,12 @@ import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u WHERE(:weather IS NULL OR t.weather = :weather) ORDER BY t.modifiedAt DESC")
-    Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable, String weather);
+    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u " +
+            "WHERE(:weather IS NULL OR t.weather = :weather) " +
+            "AND (:startDate IS NULL OR t.modifiedAt >= :startDate)" +
+            "AND (:endDate IS NULL OR t.modifiedAt <= :endDate)" +
+            "ORDER BY t.modifiedAt DESC")
+    Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable, String weather, String startDate, String endDate);
 
 //    @Query("SELECT t FROM Todo t " +
 //            "LEFT JOIN t.user " +
