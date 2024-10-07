@@ -4,14 +4,19 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
+import org.example.expert.domain.todo.dto.query.TodoSearchQueryDto;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
 import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,5 +46,17 @@ public class TodoController {
     @GetMapping("/todos/{todoId}")
     public ResponseEntity<TodoResponse> getTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.getTodo(todoId));
+    }
+
+    @GetMapping("/todos/search")
+    public ResponseEntity<Page<TodoSearchQueryDto>> searchTodos(
+            @RequestParam(value = "title", required = false) String titleKeyword,
+            @RequestParam(value = "managerNickname", required = false) String managerNickname,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat LocalDateTime startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat LocalDateTime endDate,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+            ) {
+        return ResponseEntity.ok(todoService.searchTodos(titleKeyword, managerNickname, startDate, endDate, page, size));
     }
 }
