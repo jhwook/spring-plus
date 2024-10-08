@@ -32,6 +32,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/health/check").permitAll()
                                 .anyRequest().authenticated() // 그 외 모든 요청 인증처리
                 ).build();
     }
