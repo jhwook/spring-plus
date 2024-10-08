@@ -31,7 +31,7 @@ public class ManagerService {
     private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
     private final TodoRepository todoRepository;
-    private final SaveManagerLogRepository saveManagerLogRepository;
+    private final ManagerLogService managerLogService;
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
@@ -43,11 +43,12 @@ public class ManagerService {
         Boolean isSaved = false;
 
         if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
-            saveManagerLog(
+            System.out.println("로그 생성 시도");
+            managerLogService.saveManagerLog(
                     "담당자를 등록하려고 하는 유저가 유효하지 않거나, 일정을 만든 유저가 아닙니다.",
                     isSaved,
-                    user,
-                    todo
+                    user.getId(),
+                    todo.getId()
             );
             throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 유효하지 않거나, 일정을 만든 유저가 아닙니다.");
         }
@@ -56,11 +57,12 @@ public class ManagerService {
                 .orElseThrow(() -> new InvalidRequestException("등록하려고 하는 담당자 유저가 존재하지 않습니다."));
 
         if (ObjectUtils.nullSafeEquals(user.getId(), managerUser.getId())) {
-            saveManagerLog(
+            System.out.println("로그 생성 시도");
+            managerLogService.saveManagerLog(
                     "일정 작성자는 본인을 담당자로 등록할 수 없습니다.",
                     isSaved,
-                    user,
-                    todo
+                    user.getId(),
+                    todo.getId()
             );
             throw new InvalidRequestException("일정 작성자는 본인을 담당자로 등록할 수 없습니다.");
         }
@@ -70,11 +72,11 @@ public class ManagerService {
 
         isSaved = true;
 
-        saveManagerLog(
+        managerLogService.saveManagerLog(
                 "매니저 등록 성공",
                 isSaved,
-                user,
-                todo
+                user.getId(),
+                todo.getId()
         );
 
         return new ManagerSaveResponse(
@@ -119,11 +121,5 @@ public class ManagerService {
         }
 
         managerRepository.delete(manager);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveManagerLog(String details, Boolean isSaved, User user, Todo todo) {
-        SaveManagerLog saveManagerLog = new SaveManagerLog(details, isSaved, user, todo);
-        saveManagerLogRepository.save(saveManagerLog);
     }
 }

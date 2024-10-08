@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.expert.domain.common.entity.Timestamped;
-import org.example.expert.domain.todo.entity.Todo;
-import org.example.expert.domain.user.entity.User;
 
 @Getter
 @NoArgsConstructor
@@ -22,18 +20,17 @@ public class SaveManagerLog extends Timestamped {
     @Column(name = "details")
     private String details;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "todo_id", nullable = false)
-    private Todo todo;
+    @Column(name = "todo_id")
+    private Long todoId;
 
-    public SaveManagerLog(String details, Boolean isSaved, User user, Todo todo) {
+
+    public SaveManagerLog(String details, Boolean isSaved, Long userId, Long todoId) {
         this.details = details;
         this.isSaved = isSaved;
-        this.user = user;
-        this.todo = todo;
+        this.userId = userId;
+        this.todoId = todoId;
     }
 }
