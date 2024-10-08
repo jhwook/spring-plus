@@ -23,6 +23,8 @@ public class User extends Timestamped {
 
     private String nickname;
 
+    private String imgUrl;
+
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
@@ -55,5 +57,9 @@ public class User extends Timestamped {
 
     public void updateRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    public void updateImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
