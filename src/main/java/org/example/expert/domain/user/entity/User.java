@@ -62,4 +62,8 @@ public class User extends Timestamped {
     public void updateImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    public void updateUserNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
