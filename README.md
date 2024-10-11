@@ -26,3 +26,7 @@
   - **ResponseBody**: "Application is running"
 
 - RDS 데이터베이스 생성, EC2에서 실행한 어플리케이션과 연결
+
+## 트러블 슈팅 
+https://velog.io/@jhwook/JPA%EC%8B%AC%ED%99%94-AWS-%EA%B3%BC%EC%A0%9C-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85
+
